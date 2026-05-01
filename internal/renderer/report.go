@@ -23,11 +23,15 @@ type CategoryItems struct {
 type ReportItem struct {
 	Title         string
 	URL           string
+	Description   string
 	Source        string
 	ExtraSources  []string
 	PublishedAt   time.Time
 	Score         int
 	CoverageCount int
+	OGTitle       string
+	OGDescription string
+	OGImage       string
 }
 
 // BuildReport processes classified items into sorted, scored report data.
@@ -56,11 +60,15 @@ func BuildReport(classified map[string][]fetcher.RawItem, categories []config.Ca
 			reportItems = append(reportItems, ReportItem{
 				Title:         d.Title,
 				URL:           d.URL,
+				Description:   d.Description,
 				Source:        d.Source,
 				ExtraSources:  extra,
 				PublishedAt:   d.PublishedAt,
 				Score:         score,
 				CoverageCount: len(d.Sources),
+				OGTitle:       d.OGMeta.OGTitle,
+				OGDescription: d.OGMeta.OGDescription,
+				OGImage:       d.OGMeta.OGImage,
 			})
 		}
 
@@ -157,15 +165,40 @@ footer p{margin-bottom:4px}
 				scoreClass = "badge-score-high"
 			}
 
-			sb.WriteString(fmt.Sprintf(`<div class="item">
-<div class="item-title"><a href="%s" target="_blank" rel="noopener noreferrer">%s</a></div>
-<div class="item-meta">
-<span class="badge badge-source">%s</span>
-`,
+			displayTitle := item.Title
+			if item.OGTitle != "" {
+				displayTitle = item.OGTitle
+			}
+			displayDesc := item.Description
+			if item.OGDescription != "" {
+				displayDesc = item.OGDescription
+			}
+
+			sb.WriteString(`<div class="item">`)
+
+			if item.OGImage != "" {
+				sb.WriteString(fmt.Sprintf(
+					`<a href="%s" target="_blank" rel="noopener noreferrer"><img src="%s" alt="" style="display:block;width:100%%;max-width:600px;height:auto;border-radius:4px;margin-bottom:8px"></a>`,
+					html.EscapeString(item.URL),
+					html.EscapeString(item.OGImage),
+				))
+			}
+
+			sb.WriteString(fmt.Sprintf(
+				`<div class="item-title"><a href="%s" target="_blank" rel="noopener noreferrer" style="font-weight:600">%s</a></div>`,
 				html.EscapeString(item.URL),
-				html.EscapeString(item.Title),
-				html.EscapeString(item.Source),
+				html.EscapeString(displayTitle),
 			))
+
+			if displayDesc != "" {
+				sb.WriteString(fmt.Sprintf(
+					`<div style="font-size:0.875rem;color:#475569;margin-top:4px;line-height:1.5">%s</div>`,
+					html.EscapeString(displayDesc),
+				))
+			}
+
+			sb.WriteString(`<div class="item-meta">`)
+			sb.WriteString(fmt.Sprintf(`<span class="badge badge-source">%s</span>`, html.EscapeString(item.Source)))
 
 			for _, extra := range item.ExtraSources {
 				sb.WriteString(fmt.Sprintf(`<span class="badge badge-source">%s</span>`, html.EscapeString(extra)))
