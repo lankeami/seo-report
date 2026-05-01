@@ -1,0 +1,76 @@
+sources:
+  rss:
+    - name: Search Engine Journal
+      url: https://www.searchenginejournal.com/feed/
+      weight: 3
+    - name: Search Engine Land
+      url: https://searchengineland.com/feed
+      weight: 3
+    - name: Search Engine Roundtable
+      url: https://www.seroundtable.com/feed/
+      weight: 3
+    - name: Google Search Central
+      url: https://developers.google.com/search/blog/atom.xml
+      weight: 3
+    - name: Moz Blog
+      url: https://moz.com/blog/feed
+      weight: 2
+    - name: Ahrefs Blog
+      url: https://ahrefs.com/blog/feed/
+      weight: 2
+    - name: Semrush Blog
+      url: https://www.semrush.com/blog/feed/
+      weight: 2
+    - name: Screaming Frog Blog
+      url: https://www.screamingfrog.co.uk/feed/
+      weight: 1
+
+keywords:
+  seo_relevance:
+    - SEO
+    - AEO
+    - search engine optimization
+    - search ranking
+    - google search
+    - serp
+    - backlink
+    - keyword
+    - crawl
+    - indexing
+    - ai overview
+    - answer engine
+
+categories:
+  - name: "AI Overviews & AEO"
+    keywords: ["ai overview", "answer engine", "sge", "featured snippet", "zero-click", "aeo", "llm seo", "generative search"]
+    priority: 1
+  - name: "Algorithm Updates"
+    keywords: ["core update", "algorithm update", "google update", "ranking change", "broad core"]
+    priority: 2
+  - name: "Technical SEO"
+    keywords: ["crawling", "indexing", "site speed", "core web vitals", "structured data", "schema", "robots.txt", "sitemap"]
+    priority: 3
+  - name: "Content Strategy"
+    keywords: ["content marketing", "topical authority", "e-e-a-t", "eeat", "helpful content", "content quality"]
+    priority: 4
+  - name: "Link Building"
+    keywords: ["backlinks", "link building", "domain authority", "link profile"]
+    priority: 5
+  - name: "Local SEO"
+    keywords: ["local seo", "google business", "gbp", "local pack", "map pack"]
+    priority: 6
+  - name: "E-commerce SEO"
+    keywords: ["ecommerce seo", "product page", "merchant center", "shopping results"]
+    priority: 7
+  - name: "Tools & Research"
+    keywords: ["semrush", "ahrefs", "moz", "screaming frog", "seo tool", "rank tracker"]
+    priority: 8
+  - name: "Industry News"
+    keywords: []
+    priority: 9
+
+output:
+  dir: docs
+
+dedup:
+  levenshtein_threshold: 0.85

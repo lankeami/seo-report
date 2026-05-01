@@ -1,0 +1,40 @@
+name: Daily SEO Report
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Build
+        run: go build -o seo-report ./cmd/seo-report
+
+      - name: Generate report
+        run: ./seo-report generate
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            REPORT_DATE=$(date -u +%Y-%m-%d)
+            git commit -m "chore: daily SEO report for ${REPORT_DATE}"
+            git push
+          fi
