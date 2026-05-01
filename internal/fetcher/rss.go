@@ -10,6 +10,7 @@ import (
 // FetchRSS fetches items from an RSS/Atom feed published after `since`.
 func FetchRSS(url, sourceName string, sourceWeight int, since time.Time) ([]RawItem, error) {
 	parser := gofeed.NewParser()
+	parser.UserAgent = "seo-report/1.0 (github.com/jaychinthrajah/seo-report)"
 	feed, err := parser.ParseURL(url)
 	if err != nil {
 		return nil, fmt.Errorf("parsing feed %s: %w", sourceName, err)

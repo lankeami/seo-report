@@ -24,6 +24,12 @@ sources:
     - name: Screaming Frog Blog
       url: https://www.screamingfrog.co.uk/feed/
       weight: 1
+    - name: Reddit r/SEO
+      url: https://www.reddit.com/r/SEO/top.rss?t=day
+      weight: 1
+    - name: Reddit r/aeo
+      url: https://www.reddit.com/r/aeo/top.rss?t=day
+      weight: 1
 
 keywords:
   seo_relevance:
