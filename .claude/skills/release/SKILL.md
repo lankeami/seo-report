@@ -38,9 +38,30 @@ This chains: `generate` → `commit` → `pr` → `merge` → `gh-release`
 make dry-run   # prints HTML to stdout, writes nothing
 ```
 
+## Re-running on the same date
+
+Before retrying, assess current state and resume from the right step:
+
+```bash
+DATE=$(date -u +%Y-%m-%d)
+git branch --show-current
+gh pr list --head chore/seo-report-$DATE
+gh release view v$DATE 2>/dev/null && echo "release exists"
+```
+
+| State | Action |
+|---|---|
+| On `main`, no branch yet | `make release` (full run) |
+| On `main`, branch exists, no PR | `git checkout chore/seo-report-$DATE && make pr && make merge && make gh-release` |
+| On release branch, no PR | `make pr && make merge && make gh-release` |
+| PR open, not merged | `make merge && make gh-release` |
+| PR merged, no release | `make gh-release` |
+| Release tag already exists | `gh release delete v$DATE --yes && git tag -d v$DATE && git push origin --delete refs/tags/v$DATE && make gh-release` |
+| Need to regenerate the report | `git checkout main && git branch -D chore/seo-report-$DATE && git push origin --delete chore/seo-report-$DATE && rm docs/$DATE.html && make release` |
+
 ## Common mistakes
 
-**Nothing to commit** — `docs/` already contains today's report. If re-running on same day, delete `docs/YYYY-MM-DD.html` first and re-run `make generate`.
+**Nothing to commit** — `docs/` already contains today's report. See "Re-running on the same date" above.
 
 **PR already merged** — `make merge` will error if PR is closed. Check `gh pr list` and proceed from the appropriate step.
 
