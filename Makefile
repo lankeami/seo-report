@@ -3,7 +3,7 @@ CMD        := ./cmd/seo-report
 DATE       := $(shell date -u +%Y-%m-%d)
 BRANCH     := chore/seo-report-$(DATE)
 
-.PHONY: help build generate test clean sources commit pr merge release
+.PHONY: help build generate test clean sources commit pr merge gh-release release
 
 .DEFAULT_GOAL := help
 
@@ -66,4 +66,9 @@ merge: ## Mark open PR as ready and merge it
 	git checkout main
 	git pull --ff-only origin main
 
-release: generate commit pr merge ## Full pipeline: fetch → report → commit → PR → merge
+gh-release: ## Create a versioned GitHub release tagged v<DATE>
+	gh release create "v$(DATE)" \
+		--title "SEO Report $(DATE)" \
+		--notes "Daily AEO/SEO digest for $(DATE). View the report at https://lankeami.github.io/seo-report/$(DATE).html"
+
+release: generate commit pr merge gh-release ## Full pipeline: fetch → report → commit → PR → merge → GitHub release
