@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -59,6 +60,13 @@ func runGenerate(cmd *cobra.Command, args []string) error {
 		fmt.Fprintf(os.Stderr, "fetch warning: %v\n", e)
 	}
 	fmt.Printf("Fetched %d raw items from %d sources\n", len(items), len(cfg.Sources.RSS))
+
+	if !dryRun {
+		fmt.Println("Fetching Open Graph metadata...")
+		ogCtx, ogCancel := context.WithTimeout(context.Background(), 60*time.Second)
+		defer ogCancel()
+		items = fetcher.EnrichOGMeta(ogCtx, items)
+	}
 
 	fmt.Println("Classifying items...")
 	classified := processor.Classify(items, cfg)
