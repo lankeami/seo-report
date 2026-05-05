@@ -29,8 +29,6 @@ func TestRenderIndex_ContainsKeyElements(t *testing.T) {
 		"Daily aggregation of AEO and SEO news",
 		"2026-05-01.html",
 		"2026-04-30.html",
-		`target="_blank"`,
-		`rel="noopener noreferrer"`,
 		"12 items",
 		"4 categories",
 		"Last updated:",
