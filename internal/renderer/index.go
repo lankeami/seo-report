@@ -59,7 +59,7 @@ footer{margin-top:48px;padding-top:24px;border-top:1px solid #e2e8f0;color:#94a3
 		sb.WriteString(`<ul class="reports">`)
 		for _, r := range reports {
 			sb.WriteString(fmt.Sprintf(`<li class="report-item">
-<div class="report-date"><a href="%s" target="_blank" rel="noopener noreferrer">%s</a></div>
+<div class="report-date"><a href="%s">%s</a></div>
 <div class="report-stats">
 <span class="stat">%d items</span>
 <span class="stat">%d categories</span>
